@@ -1,4 +1,5 @@
 name: GitHub Snake Game
+
 on:
   # Schedule the workflow to run daily at midnight UTC
   schedule:
@@ -9,14 +10,16 @@ on:
   push:
     branches:
       - main
+
 jobs:
   generate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      # Step 1: Checkout the repository
+      # Step 1: Check out the repository
       - name: Checkout Repository
         uses: actions/checkout@v3
+
       # Step 2: Generate the snake animations
       - name: Generate GitHub Contributions Snake Animations
         uses: Platane/snk@v3
@@ -29,12 +32,14 @@ jobs:
             dist/github-snake-dark.svg?palette=github-dark
             dist/ocean.gif?color_snake=orange&color_dots=#bfd6f6,#8dbdff,#64a1f4,#4b91f1,#3c7dd9
         env:
-          # Use the PAT with extended permissions
+          # Use the PAT with extended permissions to fetch private contributions
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+
       # Step 3: Deploy the generated files to the 'output' branch
       - name: Deploy to Output Branch
         uses: peaceiris/actions-gh-pages@v3
         with:
+          # Use the same PAT for deployment
           github_token: ${{ secrets.PAT_TOKEN }}
           publish_dir: ./dist
           publish_branch: output
